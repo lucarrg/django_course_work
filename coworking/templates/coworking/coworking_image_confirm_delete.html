@@ -1,0 +1,15 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Удалить изображение{% endblock %}
+
+{% block content %}
+<h1>Удалить изображение коворкинга</h1>
+<img src="{{ image.image.url }}" style="max-width: 300px; border-radius: 6px;">
+<p>Вы уверены, что хотите удалить это изображение?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Удалить</button>
+    <a href="{% url 'coworking:coworking_detail' image.coworking.id %}">Отмена</a>
+</form>
+{% endblock %}

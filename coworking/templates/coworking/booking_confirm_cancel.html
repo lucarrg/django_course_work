@@ -1,0 +1,16 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Отмена бронирования{% endblock %}
+
+{% block content %}
+<h1>Отменить бронирование #{{ booking.id }}?</h1>
+<p>Рабочее место: {{ booking.workplace.name }}</p>
+<p>Коворкинг: {{ booking.workplace.coworking.name }}</p>
+<p>Время: {{ booking.start_time }} – {{ booking.end_time }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Да, отменить</button>
+    <a href="{% url 'coworking:booking_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

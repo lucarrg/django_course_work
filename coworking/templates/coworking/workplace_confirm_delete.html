@@ -1,0 +1,23 @@
+{% extends "coworking/base.html" %}
+
+{% block title %}Удалить рабочее место{% endblock %}
+
+{% block content %}
+    <h1>Удалить рабочее место</h1>
+
+    <p>
+        Вы уверены, что хотите удалить рабочее место
+        <strong>{{ workplace.name }}</strong>
+        из коворкинга
+        <strong>{{ workplace.coworking.name }}</strong>?
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">🗑 Удалить</button>
+        <a href="{% url 'coworking:coworking_detail' workplace.coworking.id %}">
+            Отмена
+        </a>
+    </form>
+{% endblock %}
+Ё

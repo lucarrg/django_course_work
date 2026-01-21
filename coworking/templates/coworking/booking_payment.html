@@ -1,0 +1,20 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Оплата бронирования{% endblock %}
+
+{% block content %}
+<h1>Оплата бронирования #{{ booking.id }}</h1>
+<p><strong>Рабочее место:</strong> {{ booking.workplace.name }}</p>
+<p><strong>Коворкинг:</strong> {{ booking.workplace.coworking.name }}</p>
+<p><strong>Сумма к оплате:</strong> {{ booking.total_price }} ₽</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <p>{{ form.payment_method.label }}<br>{{ form.payment_method }}</p>
+
+    <button type="submit">Оплатить</button>
+    <a href="{% url 'coworking:booking_list' %}">Отмена</a>
+</form>
+{% endblock %}

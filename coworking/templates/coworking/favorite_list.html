@@ -1,0 +1,32 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Избранное{% endblock %}
+
+{% block content %}
+<h1>Избранные рабочие места</h1>
+
+{% if favorites %}
+    <ul>
+    {% for workplace in favorites %}
+        <li>
+            <a href="{% url 'coworking:workplace_detail' workplace.id %}">{{ workplace.name }}</a>
+            — {{ workplace.workplace_type }}
+            — {{ workplace.price_per_hour }} ₽/час
+
+            <!-- Кнопка удалить из избранного -->
+            <form method="post" action="{% url 'coworking:favorite_remove' workplace.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">💔 Убрать из избранного</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>У вас пока нет избранных рабочих мест.</p>
+{% endif %}
+
+<p>
+    <a href="{% url 'coworking:coworking_list' %}">← Назад к списку коворкингов</a>
+</p>
+
+{% endblock %}

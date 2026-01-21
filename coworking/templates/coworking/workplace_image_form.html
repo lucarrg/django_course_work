@@ -1,0 +1,17 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Загрузить изображение</button>
+</form>
+
+<p>
+    <a href="{% url 'coworking:workplace_detail' workplace.id %}">← Назад к рабочему месту</a>
+</p>
+{% endblock %}

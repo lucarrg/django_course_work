@@ -1,0 +1,16 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Удалить {{ coworking.name }}{% endblock %}
+
+{% block content %}
+<h1>Удалить "{{ coworking.name }}"?</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+</form>
+
+<p>
+    <a href="{% url 'coworking:coworking_detail' coworking.id %}">Отмена</a>
+</p>
+{% endblock %}

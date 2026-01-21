@@ -1,0 +1,17 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+
+<p>
+    <a href="{% if form.instance.id %}{% url 'coworking:workplace_detail' form.instance.id %}{% else %}{% url 'coworking:coworking_list' %}{% endif %}">← Отмена</a>
+</p>
+{% endblock %}

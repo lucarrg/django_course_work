@@ -1,0 +1,30 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Рабочие места - {{ coworking.name }}{% endblock %}
+
+{% block content %}
+<h1>Рабочие места коворкинга: {{ coworking.name }}</h1>
+
+<p>
+    {% if user.is_staff %}
+        <a href="{% url 'coworking:workplace_add' %}">➕ Добавить рабочее место</a>
+    {% endif %}
+</p>
+
+<ul>
+    {% for workplace in workplaces %}
+        <li>
+            <a href="{% url 'coworking:workplace_detail' workplace.id %}">{{ workplace.name }}</a>
+            — {{ workplace.workplace_type.name }} — {{ workplace.price_per_hour }} ₽/час
+            {% if user.is_staff %}
+                | <a href="{% url 'coworking:workplace_edit' workplace.id %}">✏ Редактировать</a>
+                | <a href="{% url 'coworking:workplace_delete' workplace.id %}">🗑 Удалить</a>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>Рабочих мест пока нет</li>
+    {% endfor %}
+</ul>
+
+<p><a href="{% url 'coworking:coworking_detail' coworking.id %}">← Назад к коворкингу</a></p>
+{% endblock %}

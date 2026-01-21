@@ -1,0 +1,77 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}{{ workplace.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ workplace.name }}</h1>
+
+<p><strong>Тип рабочего места:</strong> {{ workplace.workplace_type }}</p>
+<p><strong>Цена:</strong> {{ workplace.price_per_hour }} ₽/час</p>
+
+<h3>Фотографии рабочего места:</h3>
+<div class="workplace-images">
+    {% for image in workplace.images.all %}
+        {% if image.image %}
+            <div style="display: inline-block; margin-right: 10px; text-align: center;">
+                <img
+                    src="{{ image.image.url }}"
+                    alt="{{ workplace.name }}"
+                    style="max-width: 300px; border-radius: 6px;"
+                >
+                {% if user.is_staff %}
+                    <br>
+                    <a href="{% url 'coworking:workplace_image_delete' image.id %}">🗑 Удалить</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>Изображений пока нет</p>
+    {% endfor %}
+</div>
+
+{% if user.is_staff %}
+<p>
+    <a href="{% url 'coworking:workplace_update' workplace.id %}">✏ Редактировать рабочее место</a> |
+    <a href="{% url 'coworking:workplace_delete' workplace.id %}">🗑 Удалить рабочее место</a>
+</p>
+<p>
+    <a href="{% url 'coworking:workplace_image_add' workplace.id %}">➕ Добавить изображение</a>
+</p>
+{% endif %}
+
+<h3>Избранное</h3>
+{% if user.is_authenticated %}
+    {% if workplace.id in user_favorites %}
+        <form method="post" action="{% url 'coworking:favorite_remove' workplace.id %}">
+            {% csrf_token %}
+            <button type="submit">💔 Убрать из избранного</button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'coworking:favorite_add' workplace.id %}">
+            {% csrf_token %}
+            <button type="submit">❤️ Добавить в избранное</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p>Чтобы добавить в избранное, <a href="{% url 'accounts:login' %}">войдите в аккаунт</a>.</p>
+{% endif %}
+{% if user.is_authenticated %}
+    <p>
+        <a href="{% url 'coworking:booking_create' workplace.id %}">
+            🗓 Забронировать это место
+        </a>
+    </p>
+{% else %}
+    <p>Чтобы забронировать, <a href="{% url 'accounts:login' %}">войдите в аккаунт</a>.</p>
+{% endif %}
+
+
+<p>
+    {% if workplace.coworking %}
+        <a href="{% url 'coworking:coworking_detail' workplace.coworking.id %}">← Назад к коворкингу</a>
+    {% else %}
+        <a href="{% url 'coworking:coworking_list' %}">← Назад к списку коворкингов</a>
+    {% endif %}
+</p>
+
+{% endblock %}

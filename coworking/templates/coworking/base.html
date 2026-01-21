@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Coworking{% endblock %}</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'coworking/style.css' %}">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-content">
+        <a href="{% url 'coworking:coworking_list' %}" class="logo">
+            🏢 Coworking
+        </a>
+
+        <div class="auth-block">
+            {% if user.is_authenticated %}
+                Вы вошли как: {{ user.username }} | 
+                <a href="{% url 'accounts:logout' %}">Выйти</a> |
+                <a href="{% url 'coworking:booking_list' %}">Мои бронирования</a> |
+                <a href="{% url 'coworking:favorite_list' %}">Избранное</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Войти</a> |
+                <a href="{% url 'accounts:register' %}">Регистрация</a>
+            {% endif %}
+        </div>
+
+    </div>
+</header>
+
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

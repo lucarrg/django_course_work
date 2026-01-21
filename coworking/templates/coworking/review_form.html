@@ -1,0 +1,18 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}Оставить отзыв{% endblock %}
+
+{% block content %}
+<h1>Оставить отзыв для "{{ coworking.name }}"</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <p>{{ form.rating.label }}<br>{{ form.rating }}</p>
+    <p>{{ form.comment.label }}<br>{{ form.comment }}</p>
+
+    <button type="submit">Отправить отзыв</button>
+    <a href="{% url 'coworking:coworking_detail' coworking.id %}">Отмена</a>
+</form>
+{% endblock %}

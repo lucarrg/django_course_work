@@ -1,0 +1,46 @@
+{% extends 'coworking/base.html' %}
+{% load static %}  {# <-- вот эта строка обязательна #}
+
+{% block title %}Коворкинги{% endblock %}
+
+{% block content %}
+
+<h1>Список коворкингов</h1>
+
+{% if user.is_staff %}
+<p>
+    <a href="{% url 'coworking:coworking_create' %}">➕ Добавить коворкинг</a>
+</p>
+{% endif %}
+
+<ul style="list-style: none; padding: 0;">
+    {% for coworking in coworkings %}
+        <li style="margin-bottom: 20px; border: 1px solid #ddd; padding: 10px; border-radius: 8px; display: flex; align-items: flex-start; gap: 15px;">
+            
+            {% if coworking.first_image %}
+                <img src="{{ coworking.first_image.image.url }}" alt="{{ coworking.name }}" style="width: 200px; height: auto; border-radius: 6px; object-fit: cover;">
+            {% else %}
+                <img src="{% static 'images/placeholder.png' %}" alt="Нет изображения" style="width: 200px; height: auto; border-radius: 6px; object-fit: cover;">
+            {% endif %}
+
+            <div>
+                <a href="{% url 'coworking:coworking_detail' coworking.id %}">
+                    <strong style="font-size: 1.2em;">{{ coworking.name }}</strong>
+                </a><br>
+
+                <span>{{ coworking.address }}</span><br>
+
+                {% if user.is_staff %}
+                <p style="margin-top: 5px;">
+                    <a href="{% url 'coworking:coworking_update' coworking.id %}">✏ Редактировать</a> |
+                    <a href="{% url 'coworking:coworking_delete' coworking.id %}">🗑 Удалить</a>
+                </p>
+                {% endif %}
+            </div>
+        </li>
+    {% empty %}
+        <li>Коворкингов пока нет</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

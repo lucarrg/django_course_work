@@ -1,0 +1,59 @@
+{% extends 'coworking/base.html' %}
+
+{% block title %}{{ coworking.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ coworking.name }}</h1>
+<p><strong>Адрес:</strong> {{ coworking.address }}</p>
+<p><strong>Описание:</strong> {{ coworking.description|default:"Описание отсутствует" }}</p>
+
+<h3>Фотографии коворкинга:</h3>
+<div class="coworking-images">
+    {% for image in coworking.images.all %}
+        {% if image.image %}
+            <div style="display: inline-block; margin-right: 10px; text-align: center;">
+                <img
+                    src="{{ image.image.url }}"
+                    alt="{{ coworking.name }}"
+                    style="max-width: 300px; border-radius: 6px;"
+                >
+                {% if user.is_staff %}
+                    <br>
+                    <a href="{% url 'coworking:coworking_image_delete' image.id %}">🗑 Удалить</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>Изображений пока нет</p>
+    {% endfor %}
+</div>
+
+<h3>Рабочие места</h3>
+<ul>
+    {% for workplace in workplaces %}
+        <li>
+            <a href="{% url 'coworking:workplace_detail' workplace.id %}">{{ workplace.name }}</a>
+            ({{ workplace.workplace_type }} — {{ workplace.price_per_hour }} ₽/час)
+            {% if user.is_authenticated and workplace.id in user_favorites %}
+                ❤️
+            {% endif %}
+        </li>
+    {% empty %}
+        <p>Рабочих мест пока нет</p>
+    {% endfor %}
+</ul>
+
+{% if user.is_staff %}
+<p>
+    <a href="{% url 'coworking:coworking_update' coworking.id %}">✏ Редактировать коворкинг</a> |
+    <a href="{% url 'coworking:coworking_delete' coworking.id %}">🗑 Удалить коворкинг</a>
+</p>
+<p>
+    <a href="{% url 'coworking:workplace_create' coworking.id %}">➕ Добавить рабочее место</a>
+</p>
+<p>
+    <a href="{% url 'coworking:coworking_image_add' coworking.id %}">➕ Добавить изображение</a>
+</p>
+{% endif %}
+
+{% endblock %}
