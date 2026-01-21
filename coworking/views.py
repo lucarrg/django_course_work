@@ -34,8 +34,9 @@ def coworking_list(request):
 def coworking_detail(request, pk):
     coworking = get_object_or_404(Coworking, pk=pk)
 
-    # Рабочие места
     workplaces = coworking.workplaces.all()
+
+    reviews = Review.objects.filter(coworking=coworking).select_related('user').order_by('-created_at')
 
     user_favorites = []
     if request.user.is_authenticated:
@@ -44,6 +45,7 @@ def coworking_detail(request, pk):
     context = {
         'coworking': coworking,
         'workplaces': workplaces,
+        'reviews': reviews,
         'user_favorites': user_favorites,
     }
     return render(request, 'coworking/coworking_detail.html', context)

@@ -55,6 +55,7 @@ class WorkplaceViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    # & curl.exe -X POST http://127.0.0.1:8000/api/workplaces/1/deactivate/
     @action(methods=['post'], detail=True)
     def deactivate(self, request, pk=None):
         workplace = self.get_object()
