@@ -32,5 +32,7 @@ class WorkplaceSerializer(serializers.ModelSerializer):
         return value
 
     class Meta:
+        # Указывает, для какой модели строится сериализатор
         model = Workplace
+        # Перечисляет поля, которые будут включены в сериализацию
         fields = '__all__'

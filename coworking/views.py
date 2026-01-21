@@ -422,21 +422,24 @@ def booking_cancel(request, pk):
         'booking': booking
     })
 
+@login_required
 def booking_payment(request, booking_id):
-    booking = Booking.objects.get(id=booking_id)
-    
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+
     if request.method == 'POST':
-        # создаём оплату сразу
         Payment.objects.create(
             booking=booking,
             amount=booking.total_price,
             payment_method=request.POST.get('payment_method', 'условно'),
-            payment_date=timezone.now(),  # <--- обязательно!
-            status=PaymentStatus.objects.get(name='Оплачен')  # пример
+            payment_date=timezone.now(),
+            status=PaymentStatus.objects.get(name='Оплачен')
         )
         return redirect('coworking:booking_list')
 
-    return render(request, 'coworking/booking_payment.html', {'booking': booking})
+    return render(request, 'coworking/booking_payment.html', {
+        'booking': booking
+    })
+
 
 @login_required
 def review_create(request, coworking_id):
